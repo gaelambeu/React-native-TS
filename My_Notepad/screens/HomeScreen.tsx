@@ -1,17 +1,38 @@
 import React from "react";
-import {Text, Button} from 'react-native';
+import {Text, Button, View} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from "../types";
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 type Props = {
     toggleNewNote: (toggle: boolean) => void
 }
-export const HomeScreen: React.FC<Props> = ({toggleNewNote}) => {
+export const HomeScreen: React.FC<Props> = () => {
+  const navigation = useNavigation<ScreenNavigationProp>();
+  const [noteText, setNoteText] = useState<string>('');
+
+  useEffect(() => {
+    getNote().then(result => setNoteText(result ?? ''));
+  }, [])
+
+  const getNote = async () => {
+    const result = await AsyncStorage.getItem("note");
+  }
+
     return (
         <>
-          <Text>Home Screen</Text>
+          <View>
+            <Text>
+              {noteText}
+            </Text>
+          </View>
           <Button 
-            onPress={() => toggleNewNote(true)}
+            onPress={() => navigation.navigate('EditNote')} 
             title="New Note"
           />
+          
         </>
     )
 }
