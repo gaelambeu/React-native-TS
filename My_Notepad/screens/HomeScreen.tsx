@@ -3,6 +3,7 @@ import {Text, Button, View} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ScreenNavigationProp } from "../types";
 import { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -13,9 +14,9 @@ export const HomeScreen: React.FC<Props> = () => {
   const navigation = useNavigation<ScreenNavigationProp>();
   const [noteText, setNoteText] = useState<string>('');
 
-  useEffect(() => {
-    getNote().then(result => setNoteText(result ?? ''));
-  }, [])
+  useFocusEffect(() => {
+    getNote().then(result => setNoteText(result ?? ""))
+  })
 
   const getNote = async () => {
     const result = await AsyncStorage.getItem("note");
